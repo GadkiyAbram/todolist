@@ -65,7 +65,8 @@ class TasksController extends Controller
         $task->due_date = $request->due_date;
         $task->created_by = Auth::id();
         $task->assigned_to = $request->assigned_to;
-//        dd($task->assigned_to);
+        $task->priority = $request->priority;
+//        dd($task->priority);
 
         // save the task
         $task->save();
@@ -134,7 +135,7 @@ class TasksController extends Controller
         Session::flash('success', 'Saved The Task Successfully');
 
         // Return a Redirect
-        return redirect()->route('task.index');
+        return redirect()->route('tasks.index');
     }
 
     /**
@@ -152,6 +153,6 @@ class TasksController extends Controller
         // flashing the ssession message
         Session::flash('success', 'Task deleted successfully');
         // In the end we return & redirect
-        return redirect()->route('task.index');
+        return redirect()->route('tasks.index');
     }
 }

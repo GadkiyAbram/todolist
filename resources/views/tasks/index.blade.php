@@ -24,6 +24,7 @@
                     </h3>
                     <p>{{ $task->description }}</p>
                     <h4>Due Date: <small>{{ $task->due_date }}</small></h4>
+                    <h4>Created By: <small>{{ $task->creator->first_name }} {{ $task->creator->last_name }}</small></h4>
                     <h4>Assign To: <small>{{ $task->user->first_name }} {{ $task->user->last_name }}</small></h4>
                     {!! Form::open(['route' => ['tasks.destroy', $task->id], 'method' => 'DELETE']) !!}
                     <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-sm btn-primary">Edit</a>

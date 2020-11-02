@@ -6,11 +6,32 @@
 
     <div class="row">
         <div class="col-sm-12">
-            <h1>Create Task</h1>
+            <div class="d-flex justify-content-between align-items-baseline">
+                <div class="align-content-center">
+                    <h1>Create Task</h1>
+                </div>
+
+            </div>
+
             {!! Form::open(['route' => 'tasks.store', 'method' => 'POST']) !!}
 
 {{--            @component('components.taskForm')--}}
 {{--            @endcomponent--}}
+
+            <div>
+                {{--                    <label>Priority</label>--}}
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-danger active">
+                        <input type="radio" name="priority" value="2" checked> High
+                    </label>
+                    <label class="btn btn-warning">
+                        <input type="radio" name="priority" value="1"> Medium
+                    </label>
+                    <label class="btn btn-success">
+                        <input type="radio" name="priority" value="0"> Low
+                    </label>
+                </div>
+            </div>
 
             {{ Form::label('name', 'Task Name', ['class' => 'control-label']) }}
             {{ Form::text('name', null, ['class' => 'form-control form-control-lg', 'placeholder' => 'Task Name']) }}
