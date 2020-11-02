@@ -13,9 +13,12 @@ class TasksController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
-        return "This is the index page";
+        $tasks = Task::orderBy('due_date', 'asc')->paginate(5);
+        return view('tasks.index', compact('tasks'));
+//        return view('tasks.index')->with('tasks', $tasks);
     }
 
     /**
@@ -58,7 +61,7 @@ class TasksController extends Controller
         Session::flash('success', 'Created Task Successfully');
 
         // Return a Redirect
-        return redirect()->route('task.create');
+        return redirect()->route('tasks.index');
     }
 
     /**
@@ -69,7 +72,9 @@ class TasksController extends Controller
      */
     public function show($id)
     {
-        //
+        // Find the Task by id
+        // Return a view show.blade.php
+        // pass the variable to view
     }
 
     /**
@@ -80,7 +85,9 @@ class TasksController extends Controller
      */
     public function edit($id)
     {
-        //
+        $task = Task::find($id);
+        $task->dueDateFormatting = false;
+        return view('tasks.edit', compact('task'));
     }
 
     /**
@@ -92,7 +99,29 @@ class TasksController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // validate the Data
+        $this->validate($request, [
+            'name' => 'required|string|max:255|min:3',
+            'description' => 'required|string|max:10000|min:10',
+            'due_date' => 'required|date',
+        ]);
+
+        // Find a related task
+        $task = Task::find($id);
+
+        // assign the task data from our request
+        $task->name = $request->name;
+        $task->description = $request->description;
+        $task->due_date = $request->due_date;
+
+        // save the task
+        $task->save();
+
+        // flash Session message with Success
+        Session::flash('success', 'Saved The Task Successfully');
+
+        // Return a Redirect
+        return redirect()->route('task.index');
     }
 
     /**
@@ -103,6 +132,13 @@ class TasksController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // finding the specific task by id
+        $task = Task::find($id);
+        // deleting the task
+        $task->delete();
+        // flashing the ssession message
+        Session::flash('success', 'Task deleted successfully');
+        // In the end we return & redirect
+        return redirect()->route('task.index');
     }
 }

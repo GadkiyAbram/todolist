@@ -15,9 +15,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::resource('task', 'App\Http\Controllers\TasksController');
+Route::resource('tasks', 'App\Http\Controllers\TasksController');
 
 Route::get('/', function () {
     return redirect()->route('task.index');
 });
-
