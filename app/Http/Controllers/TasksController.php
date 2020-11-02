@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 class TasksController extends Controller
@@ -24,11 +27,18 @@ class TasksController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function create()
     {
-        return view('tasks.create');
+        $currentUserId = Auth::id();
+        $usersToAssign = DB::table('users')
+            ->where('manager_id', $currentUserId)
+            ->where('id', '!=', $currentUserId)
+            ->get()
+            ->toArray();
+//        dd($currentUserId);
+        return view('tasks.create', compact('usersToAssign'));
     }
 
     /**
@@ -53,6 +63,9 @@ class TasksController extends Controller
         $task->name = $request->name;
         $task->description = $request->description;
         $task->due_date = $request->due_date;
+        $task->created_by = Auth::id();
+        $task->assigned_to = $request->assigned_to;
+//        dd($task->assigned_to);
 
         // save the task
         $task->save();

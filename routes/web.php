@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,8 +16,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::resource('tasks', 'App\Http\Controllers\TasksController');
+Route::resource('tasks', 'App\Http\Controllers\TasksController')->middleware('auth');
 
-Route::get('/', function () {
-    return redirect()->route('task.index');
-});
+//Route::get('/', function () {
+//    return redirect()->route('tasks.index');
+//});
+
+Auth::routes();
+
+Route::get('/', 'App\Http\Controllers\HomeController@index')->name('home');
