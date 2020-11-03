@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
-use App\Models\User;
+use Carbon\Carbon;
+use Carbon\Traits\Date;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -21,8 +22,65 @@ class TasksController extends Controller
     {
         $tasks = Task::orderBy('due_date', 'asc')->paginate(5);
         return view('tasks.index', compact('tasks'));
-//        return view('tasks.index')->with('tasks', $tasks);
     }
+
+    public function sortBy(Request $request){
+
+        $item = $request->item;
+        $tasks = null;
+
+        if($item == 'day'){
+            $tasks = Task::from('tasks')
+                ->where(function ($q){
+                    $q->where('created_by', Auth::id())
+                        ->orWhere('assigned_to', Auth::id());
+                })
+                ->where('due_date', date('yy-m-d'))
+                ->get();
+        }else if ($item == 'updated_at'){
+            $tasks = Task::from('tasks')
+                ->where(function ($q){
+                    $q->where('created_by', Auth::id())
+                        ->orWhere('assigned_to', Auth::id());
+                })
+                ->orderBy($item, 'desc')->get();
+
+        }else if ($item == 'week'){
+            $tasks = Task::from('tasks')
+                ->where(function ($q){
+                    $q->where('created_by', Auth::id())
+                        ->orWhere('assigned_to', Auth::id());
+                })
+                ->where('due_date', '<', Date('yy-m-d', strtotime('+7 days')))
+                ->get();
+
+        }else if ($item == 'future'){
+            $tasks = Task::from('tasks')
+                ->where(function ($q){
+                    $q->where('created_by', Auth::id())
+                        ->orWhere('assigned_to', Auth::id());
+                })
+                ->where('due_date', '>', Date('yy-m-d', strtotime('+7 days')))
+                ->get();
+//            dd($tasks->count());
+//            dd(Date('yy-m-d', strtotime('+7 days')));
+        }else if ($item == 'assigned_to'){
+            $tasks = Task::from('tasks')
+                ->where('created_by', Auth::id())
+                ->orderBy('assigned_to', 'asc')
+                ->get();
+        }
+
+
+        foreach ($tasks as $task){
+//            dd(Date('Y-m-d'), $task->due_date, ($task->due_date > Date('Y-m-d', strtotime('+7 days'))));
+        }
+
+
+        return view('tasks.data', compact('tasks'));
+    }
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -66,7 +124,8 @@ class TasksController extends Controller
         $task->created_by = Auth::id();
         $task->assigned_to = $request->assigned_to;
         $task->priority = $request->priority;
-//        dd($task->priority);
+        $task->status = $request->status;
+//        dd($task->status);
 
         // save the task
         $task->save();
@@ -99,9 +158,14 @@ class TasksController extends Controller
      */
     public function edit($id)
     {
+        $disabled = 'disabled';
+        $selected = 'selected';
         $task = Task::find($id);
-        $task->dueDateFormatting = false;
-        return view('tasks.edit', compact('task'));
+        if ($task->created_by == Auth::id()){ $disabled = ''; }
+//        dd($task->due_date < date('M j, Y'), $task->due_date, date('M j, Y'));
+
+//        $task->dueDateFormatting = false;
+        return view('tasks.edit', compact('task', 'disabled', 'selected'));
     }
 
     /**
@@ -113,20 +177,28 @@ class TasksController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // validate the Data
-        $this->validate($request, [
-            'name' => 'required|string|max:255|min:3',
-            'description' => 'required|string|max:10000|min:10',
-            'due_date' => 'required|date',
-        ]);
-
         // Find a related task
         $task = Task::find($id);
 
-        // assign the task data from our request
-        $task->name = $request->name;
-        $task->description = $request->description;
-        $task->due_date = $request->due_date;
+        if(Auth::id() == $task->created_by){
+            // validate the Data
+            $this->validate($request, [
+                'name' => 'required|string|max:255|min:3',
+                'description' => 'required|string|max:10000|min:10',
+                'due_date' => 'required|date',
+            ]);
+
+            // assign the task data from our request
+            $task->name = $request->name;
+            $task->description = $request->description;
+            $task->due_date = $request->due_date;
+            $task->priority = $request->priority;
+            $task->status = $request->status;
+        }else{
+            $task->status = $request->status;
+        }
+
+//        dd($request->priority);
 
         // save the task
         $task->save();

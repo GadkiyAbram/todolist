@@ -30,14 +30,9 @@
                             <label for="middle_name" class="col-md-4 col-form-label text-md-right">Middle Name</label>
 
                             <div class="col-md-6">
-                                <input id="middle_name" type="text" class="form-control @error('middle_name') is-invalid @enderror"
-                                       name="middle_name" value="{{ old('name') }}" required autocomplete="middle_name" autofocus>
-
-                                @error('middle_name')
-                                <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                <input id="middle_name" type="text" class="form-control"
+                                       name="middle_name" value="{{ old('name') }}"
+                                       required autocomplete="middle_name" autofocus>
                             </div>
                         </div>
 

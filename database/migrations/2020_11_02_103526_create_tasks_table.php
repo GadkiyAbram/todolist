@@ -14,14 +14,14 @@ class CreateTasksTable extends Migration
     public function up()
     {
         Schema::create('tasks', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('id');       //increments
             $table->string('name');
             $table->text('description');
             $table->date('due_date');
-            $table->integer('priority')->default('1');
-            $table->integer('status')->default(1);
-            $table->unsignedBigInteger('created_by')->default(1);
-            $table->unsignedBigInteger('assigned_to')->default(1);
+            $table->string('priority')->default('Low');
+            $table->string('status')->default('on start');
+            $table->unsignedBigInteger('created_by')->default(1);   //unsignedBigInteger
+            $table->unsignedBigInteger('assigned_to')->default(1);  //unsignedBigInteger
             $table->timestamps();
 
             $table->foreign('created_by')->references('id')->on('users');
