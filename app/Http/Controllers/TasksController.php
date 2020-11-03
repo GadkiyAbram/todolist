@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
-use Carbon\Carbon;
-use Carbon\Traits\Date;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -20,8 +18,14 @@ class TasksController extends Controller
 
     public function index()
     {
+        $currentUserId = Auth::id();
+        $usersToAssign = DB::table('users')
+            ->where('manager_id', $currentUserId)
+            ->where('id', '!=', $currentUserId)
+            ->get()
+            ->toArray();
         $tasks = Task::orderBy('due_date', 'asc')->paginate(5);
-        return view('tasks.index', compact('tasks'));
+        return view('tasks.index', compact('tasks', 'usersToAssign'));
     }
 
     public function sortBy(Request $request){

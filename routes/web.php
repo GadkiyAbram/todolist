@@ -28,9 +28,9 @@ Route::delete('/tasks/delete/{id}', 'App\Http\Controllers\TasksController@destro
 
 
 
-//Route::get('/', function () {
-//    return redirect()->route('tasks.index');
-//});
+Route::get('/', function () {
+    return redirect()->route('/tasks.index');
+});
 
 Auth::routes();
 

@@ -1,0 +1,92 @@
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                {{--MODAL BODY--}}
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="d-flex justify-content-between align-items-baseline">
+                            <div class="align-content-center">
+                                <h1>Create Task</h1>
+                            </div>
+
+                        </div>
+
+                        <form action="{{ route('tasks.store') }}" method="post" enctype="multipart/form-data">
+
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                        <label class="btn btn-danger active">
+                                            <input type="radio" name="priority" value="High" checked> High
+                                        </label>
+                                        <label class="btn btn-warning">
+                                            <input type="radio" name="priority" value="Medium"> Medium
+                                        </label>
+                                        <label class="btn btn-success">
+                                            <input type="radio" name="priority" value="Low"> Low
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <select name="status" class="custom-select" id="status">
+                                        <option value="onstart" selected>on start</option>
+                                        <option value="ongoing">ongoing</option>
+                                        <option value="complete">complete</option>
+                                        <option value="cancelled">cancelled</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="name" class="col-sm-6 col-form-label">Task Name</label>
+                                <div class="col-sm-12">
+                                    <input type="text" class="form-control" name="name" placeholder="Task Name">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="description" class="col-sm-6 col-form-label">Description</label>
+                                <div class="col-sm-12">
+                                    <textarea type="text" class="form-control" name="description" placeholder="Description"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="due_date" class="col-sm-6 col-form-label">Due Date</label>
+                                <div class="col-sm-12">
+                                    <input type="date" class="form-control" name="due_date" placeholder="Due Date">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="assigned_to" class="col-6 col-form-label">Assign to</label>
+                                <div class="col-6">
+                                    <select name="assigned_to" id="assigned_to" class="form-control">
+                                        @foreach($usersToAssign as $user)
+                                            <option value="{{ $user->id }}">{{ $user->first_name }} {{ $user->last_name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row justify-content-center mt-3">
+                                <div class="col-sm-4">
+                                    <button data-dismiss="modal" class="btn btn-block btn-secondary">Close</button>
+                                </div>
+                                <div class="col-sm-4">
+                                    <button class="btn btn-block btn-primary" type="submit">Save Task</button>
+                                </div>
+                            </div>
+                            @csrf
+                        </form>
+                    </div>
+                </div>
+                {{--END MODAL BODY--}}
+            </div>
+        </div>
+    </div>
+</div>
+{{--END MODAL--}}

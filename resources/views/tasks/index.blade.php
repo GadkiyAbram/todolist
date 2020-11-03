@@ -13,7 +13,11 @@
     <div class="row justify-content-center mb-3">
         <div class="col-sm-4">
 {{--            <a href="{{ route('tasks.create') }}" class="btn btn-block btn-success">Create Task</a>--}}
-            <a href="{{ route('tasks.create') }}" class="btn btn-block btn-success">Create Task</a>
+            {{--MODAL--}}
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#exampleModal">
+                Create Task
+            </button>
         </div>
     </div>
 
@@ -39,6 +43,11 @@
         </p>
 
     @endif
+
+    {{--    MODAL--}}
+    @include('tasks.modal')
+    {{--END MODAL--}}
+
 
     <script type="text/javascript">
         $.ajaxSetup({
