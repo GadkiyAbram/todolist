@@ -30,7 +30,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+//    protected $redirectTo = RouteServiceProvider::HOME;
 
     /**
      * Create a new controller instance.
@@ -76,8 +76,8 @@ class RegisterController extends Controller
         ]);
     }
 
-    protected function authenticated(Request $request, User $user)
-    {
-        return redirect()->route('/tasks');
-    }
+//    protected function authenticated(Request $request, User $user)
+//    {
+//        return redirect()->route('tasks.index');
+//    }
 }
