@@ -28,7 +28,7 @@
                         <option value="week" name="sort_by" class="sort_by" id="sort_by">Week</option>
                         <option value="future" name="sort_by" class="sort_by" id="sort_by">Future</option>
                         <option value="updated_at" name="sort_by" class="sort_by" id="sort_by" selected>Updated</option>
-                        @if(Auth::user()->isManager == true)
+                        @if(Auth::user()->is_manager == true)
                         <option value="assigned_to" name="sort_by" class="sort_by" id="sort_by">Employees</option>
                         @endif
                     </select>
