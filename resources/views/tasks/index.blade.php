@@ -21,7 +21,7 @@
     @if($tasks->count() == 0)
         <p class="lead text-center">Well done chops, nothing to do unless you create one :)</p>
     @else
-        <div class="d-flex justify-content-around">
+        <div class="d-flex justify-content-around mb-3">
                 <div class="dropdown">
                     <select class="form-control" id="sort_by">
                         <option value="day" name="sort_by" class="sort_by" id="sort_by" >Day</option>
