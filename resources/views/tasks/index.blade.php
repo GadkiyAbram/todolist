@@ -12,9 +12,6 @@
 
     <div class="row justify-content-center mb-3">
         <div class="col-sm-4">
-{{--            <a href="{{ route('tasks.create') }}" class="btn btn-block btn-success">Create Task</a>--}}
-            {{--MODAL--}}
-            <!-- Button trigger modal -->
             <button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#exampleModal">
                 Create Task
             </button>
@@ -39,14 +36,14 @@
         </div>
 
         <p class="ml-3 mr-3" id="output">
-{{--            @include('tasks.data')--}}
+
         </p>
 
     @endif
 
-    {{--    MODAL--}}
+    {{--    MODAL CREATE--}}
     @include('tasks.modal')
-    {{--END MODAL--}}
+    {{--END MODAL CREATE--}}
 
 
     <script type="text/javascript">
