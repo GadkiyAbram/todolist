@@ -73,17 +73,6 @@
                     </div>
                 </div>
 
-{{--                <div class="form-group row">--}}
-{{--                    <label for="assigned_to" class="col-4 col-form-label">Assign to</label>--}}
-{{--                    <div class="col-4">--}}
-{{--                        <select name="assigned_to" id="assigned_to" class="form-control">--}}
-{{--                            @foreach($usersToAssign as $user)--}}
-{{--                                <option value="{{ $user->id }}">{{ $user->first_name }} {{ $user->last_name }}</option>--}}
-{{--                            @endforeach--}}
-{{--                        </select>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-
                 <div class="row justify-content-center mt-3">
                     <div class="col-sm-4">
                         <a href="{{ route('tasks.index') }}" class="btn btn-block btn-secondary">Go Back</a>
@@ -95,53 +84,6 @@
                 @csrf
             </form>
 
-{{--            {!! Form::model($task, ['route' => ['tasks.update', $task->id], 'method' => 'PUT']) !!}--}}
-
-{{--            @component('components.taskForm')--}}
-{{--            @endcomponent--}}
-{{--            <div class="d-flex justify-content-between">--}}
-
-{{--                <div class="btn-group btn-group-toggle" data-toggle="buttons">--}}
-{{--                    <label class="btn btn-danger active">--}}
-{{--                        <input type="radio" name="priority" value="High" checked {{ $disabled }}> High--}}
-{{--                    </label>--}}
-{{--                    <label class="btn btn-warning">--}}
-{{--                        <input type="radio" name="priority" value="Medium" {{ $disabled }}> Medium--}}
-{{--                    </label>--}}
-{{--                    <label class="btn btn-success">--}}
-{{--                        <input type="radio" name="priority" value="Low" {{ $disabled }}> Low--}}
-{{--                    </label>--}}
-{{--                </div>--}}
-{{--                <div class="dropdown">--}}
-{{--                    <select name="status" class="custom-select" id="status">--}}
-{{--                        <option value="onstart">on start</option>--}}
-{{--                        <option value="ongoing">ongoing</option>--}}
-{{--                        <option value="complete">complete</option>--}}
-{{--                        <option value="cancelled">cancelled</option>--}}
-{{--                    </select>--}}
-{{--                </div>--}}
-
-{{--            </div>--}}
-
-{{--            {{ Form::label('name', 'Task Name', ['class' => 'control-label']) }}--}}
-{{--            {{ Form::text('name', null, ['class' => 'form-control form-control-lg', 'placeholder' => 'Task Name', $disabled]) }}--}}
-
-{{--            {{ Form::label('description', 'Description', ['class' => 'control-label mt-3']) }}--}}
-{{--            {{ Form::textarea('description', null, ['class' => 'form-control form-control-lg', 'placeholder' => 'Task Description', $disabled]) }}--}}
-
-{{--            {{ Form::label('due_date', 'Due Date', ['class' => 'control-label mt-3']) }}--}}
-{{--            {{ Form::date('due_date', null, ['class' => 'form-control', $disabled]) }}--}}
-
-{{--            <div class="row justify-content-center mt-3">--}}
-{{--                <div class="col-sm-4">--}}
-{{--                    <a href="{{ route('tasks.index') }}" class="btn btn-block btn-secondary">Go Back</a>--}}
-{{--                </div>--}}
-{{--                <div class="col-sm-4">--}}
-{{--                    <button class="btn btn-block btn-primary" type="submit">Save Task</button>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-
-{{--            {!! Form::close() !!}--}}
         </div>
     </div>
 

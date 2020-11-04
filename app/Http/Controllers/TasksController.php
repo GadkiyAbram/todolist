@@ -28,58 +28,37 @@ class TasksController extends Controller
         return view('tasks.index', compact('tasks', 'usersToAssign'));
     }
 
+    public function getTasksForCreatorsAndResponsible(){
+        return Task::from('tasks')
+            ->where(function ($q){
+                $q->where('created_by', Auth::id())
+                    ->orWhere('assigned_to', Auth::id());
+            });
+    }
+
     public function sortBy(Request $request){
 
         $item = $request->item;
-        $tasks = null;
+
+        $tasks = $this->getTasksForCreatorsAndResponsible();
 
         if($item == 'day'){
-            $tasks = Task::from('tasks')
-                ->where(function ($q){
-                    $q->where('created_by', Auth::id())
-                        ->orWhere('assigned_to', Auth::id());
-                })
-                ->where('due_date', date('yy-m-d'))
-                ->get();
+            $tasks = $tasks->where('due_date', date('yy-m-d'))->get();
         }else if ($item == 'updated_at'){
-            $tasks = Task::from('tasks')
-                ->where(function ($q){
-                    $q->where('created_by', Auth::id())
-                        ->orWhere('assigned_to', Auth::id());
-                })
-                ->orderBy($item, 'desc')->get();
+            $tasks = $tasks->orderBy($item, 'desc')->get();
 
         }else if ($item == 'week'){
-            $tasks = Task::from('tasks')
-                ->where(function ($q){
-                    $q->where('created_by', Auth::id())
-                        ->orWhere('assigned_to', Auth::id());
-                })
-                ->where('due_date', '<', Date('yy-m-d', strtotime('+7 days')))
-                ->get();
+            $tasks = $tasks->where('due_date', '<', Date('yy-m-d', strtotime('+7 days')))->get();
 
         }else if ($item == 'future'){
-            $tasks = Task::from('tasks')
-                ->where(function ($q){
-                    $q->where('created_by', Auth::id())
-                        ->orWhere('assigned_to', Auth::id());
-                })
-                ->where('due_date', '>', Date('yy-m-d', strtotime('+7 days')))
+                $tasks = $tasks->where('due_date', '>', Date('yy-m-d', strtotime('+7 days')))
                 ->get();
-//            dd($tasks->count());
-//            dd(Date('yy-m-d', strtotime('+7 days')));
         }else if ($item == 'assigned_to'){
-            $tasks = Task::from('tasks')
+            $tasks = $tasks
                 ->where('created_by', Auth::id())
                 ->orderBy('assigned_to', 'asc')
                 ->get();
         }
-
-
-        foreach ($tasks as $task){
-//            dd(Date('Y-m-d'), $task->due_date, ($task->due_date > Date('Y-m-d', strtotime('+7 days'))));
-        }
-
 
         return view('tasks.data', compact('tasks'));
     }
@@ -99,7 +78,6 @@ class TasksController extends Controller
             ->where('id', '!=', $currentUserId)
             ->get()
             ->toArray();
-//        dd($currentUserId);
         return view('tasks.create', compact('usersToAssign'));
     }
 
@@ -201,8 +179,6 @@ class TasksController extends Controller
         }else{
             $task->status = $request->status;
         }
-
-//        dd($request->priority);
 
         // save the task
         $task->save();

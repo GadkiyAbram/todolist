@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('middle_name')->nullable();
             $table->string('login')->unique();
             $table->string('password');
-            $table->boolean('isManager')->default(false);
+            $table->boolean('is_manager')->default(false);
             $table->unsignedBigInteger('manager_id')->default(0);   //unsignedBigInteger
             $table->rememberToken();
             $table->timestamps();
