@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -24,12 +25,18 @@ class TasksController extends Controller
             ->where('id', '!=', $currentUserId)
             ->get()
             ->toArray();
-        $tasks = Task::orderBy('due_date', 'asc')->paginate(5);
-        return view('tasks.index', compact('tasks', 'usersToAssign'));
+        $tasks = Task::orderBy('due_date', 'asc')
+            ->where('created_by', $currentUserId)
+            ->paginate(5);
+
+        $users = DB::table('users')->where(['manager_id' => Auth::id()])
+            ->get();
+        return view('tasks.index', compact('tasks', 'usersToAssign', 'users'));
     }
 
     public function getTasksForCreatorsAndResponsible(){
         return Task::from('tasks')
+//            ->where('assigned_to', $responsible)
             ->where(function ($q){
                 $q->where('created_by', Auth::id())
                     ->orWhere('assigned_to', Auth::id());
@@ -38,29 +45,50 @@ class TasksController extends Controller
 
     public function sortBy(Request $request){
 
-        $item = $request->item;
+        $responsible = $request->responsible;
+
+        $currentUserId = Auth::id();
+        $usersToAssign = DB::table('users')
+            ->where('manager_id', $currentUserId)
+            ->where('id', '!=', $currentUserId)
+            ->get()
+            ->toArray();
+
+        $sort_by = $request->sort_by;
 
         $tasks = $this->getTasksForCreatorsAndResponsible();
 
-        if($item == 'day'){
-            $tasks = $tasks->where('due_date', date('yy-m-d'))->get();
-        }else if ($item == 'updated_at'){
-            $tasks = $tasks->orderBy($item, 'desc')->get();
-
-        }else if ($item == 'week'){
-            $tasks = $tasks->where('due_date', '<', Date('yy-m-d', strtotime('+7 days')))->get();
-
-        }else if ($item == 'future'){
-                $tasks = $tasks->where('due_date', '>', Date('yy-m-d', strtotime('+7 days')))
-                ->get();
-        }else if ($item == 'assigned_to'){
+        if($sort_by == 'day'){
             $tasks = $tasks
+//                ->where('assigned_to', $responsible)
+                ->where('due_date', date('yy-m-d'))
+                ->get();
+        }else if ($sort_by == 'updated_at'){
+            $tasks = $tasks->orderBy($sort_by, 'desc')->get();
+
+        }else if ($sort_by == 'week'){
+            $tasks = $tasks
+//                ->where('assigned_to', $responsible)
+                ->where('due_date', '<', Date('yy-m-d', strtotime('+7 days')))
+                ->get();
+
+        }else if ($sort_by == 'future'){
+            $tasks
+//                ->where('assigned_to', $responsible)
+                ->where('due_date', '>', Date('yy-m-d', strtotime('+7 days')))
+                ->get();
+        }else if ($sort_by == 'assigned_to'){
+            $tasks = $tasks
+//                ->where('assigned_to', $responsible)
                 ->where('created_by', Auth::id())
                 ->orderBy('assigned_to', 'asc')
                 ->get();
         }
 
-        return view('tasks.data', compact('tasks'));
+        $users = DB::table('users')->where(['manager_id' => Auth::id()])
+            ->get();
+
+        return view('tasks.index', compact('tasks', 'usersToAssign', 'users'));
     }
 
 
@@ -78,6 +106,7 @@ class TasksController extends Controller
             ->where('id', '!=', $currentUserId)
             ->get()
             ->toArray();
+//        dd($usersToAssign);
         return view('tasks.create', compact('usersToAssign'));
     }
 

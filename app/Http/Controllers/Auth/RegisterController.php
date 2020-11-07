@@ -7,6 +7,7 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -42,6 +43,14 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
+    public function showRegistrationForm()
+    {
+        $managers=DB::table('users')
+            ->where('is_manager', '=', 1)
+            ->get();
+        return view('auth.register', compact('managers'));
+    }
+
     /**
      * Get a validator for an incoming registration request.
      *
@@ -53,7 +62,7 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
-            'middle_name' => ['required', 'string', 'max:255'],
+//            'middle_name' => ['string', 'max:255'],
             'login' => ['required', 'string', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
@@ -67,10 +76,22 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        $isManager = 0;
+        $managerId = 0;
+        if ($data['manager'] == 1){
+            $isManager = 1;
+            $managerId = 0;
+        }else{
+            $isManager = 0;
+            $managerId = $data['manager'];
+        }
+
         return User::create([
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
-            'middle_name' => $data['middle_name'],
+            'is_manager' => $isManager,
+            'manager_id' => $managerId,
+//            'middle_name' => $data['middle_name'],
             'login' => $data['login'],
             'password' => Hash::make($data['password']),
         ]);

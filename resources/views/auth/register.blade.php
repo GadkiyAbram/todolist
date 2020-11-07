@@ -25,16 +25,16 @@
                                 @enderror
                             </div>
                         </div>
+{{--                        MIDDLE NAME switched off--}}
+{{--                        <div class="form-group row">--}}
+{{--                            <label for="middle_name" class="col-md-4 col-form-label text-md-right">Middle Name</label>--}}
 
-                        <div class="form-group row">
-                            <label for="middle_name" class="col-md-4 col-form-label text-md-right">Middle Name</label>
-
-                            <div class="col-md-6">
-                                <input id="middle_name" type="text" class="form-control"
-                                       name="middle_name" value="{{ old('name') }}"
-                                       required autocomplete="middle_name" autofocus>
-                            </div>
-                        </div>
+{{--                            <div class="col-md-6">--}}
+{{--                                <input id="middle_name" type="text" class="form-control"--}}
+{{--                                       name="middle_name" value="{{ old('name') }}"--}}
+{{--                                       required autocomplete="middle_name" autofocus>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
 
                         <div class="form-group row">
                             <label for="last_name" class="col-md-4 col-form-label text-md-right">Last Name</label>
@@ -48,6 +48,25 @@
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="last_name" class="col-md-4 col-form-label text-md-right">Manager Name</label>
+
+                            <div class="col-md-6">
+                                <select class="form-control" id="manager" name="manager">
+                                    <option
+                                        value=1"
+                                            class="manager" id="manager" selected
+                                    >Manager itself</option>
+                                    @foreach($managers as $manager)
+                                        <option
+                                            value={{ $manager->id }}
+                                            class="manager" id="manager"
+                                        >{{ $manager->first_name }} {{ $manager->last_name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
 
