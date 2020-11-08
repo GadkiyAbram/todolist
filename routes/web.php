@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 
 //Route::resource('tasks', 'App\Http\Controllers\TasksController')->middleware('auth');
 
-Route::get('/tasks', 'App\Http\Controllers\TasksController@index')->name('tasks.index');
+Route::get('/tasks', 'App\Http\Controllers\TasksController@index')->name('tasks.index')->middleware('auth');;
 Route::post('/tasks', 'App\Http\Controllers\TasksController@sortBy')->name('tasks.sortby');
 Route::get('/tasks/create', 'App\Http\Controllers\TasksController@create')->name('tasks.create');
 Route::post('/tasks/create', 'App\Http\Controllers\TasksController@store')->name('tasks.store');

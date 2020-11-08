@@ -85,7 +85,7 @@ class TasksController extends Controller
                 ->get();
 
         }else if ($sort_by == 'future'){
-            $tasks
+            $tasks = $tasks
                 ->where('due_date', '>', Date('yy-m-d', strtotime('+7 days')))
                 ->get();
         }else if ($sort_by == 'assigned_to'){
