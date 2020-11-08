@@ -12,7 +12,8 @@
 
     <div class="row justify-content-center mb-3">
         <div class="col-sm-4">
-            <a class="mb-3" href="/">Go back HOME</a>
+{{--            <a class="mb-3" href="/">Go back HOME</a>--}}
+            <button class="btn btn-block btn-primary"><a href="/" style="color: #ffffff">HOME</a></button>
             <button type="button"
                     class="btn btn-block btn-success"
                     data-toggle="modal"
