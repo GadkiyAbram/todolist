@@ -23,6 +23,7 @@
             <div class="dropdown mt-2">
                 <form action="{{ route('tasks.sortby') }}" method="post" enctype="multipart/form-data">
                     <select class="sortby form-control" id="sort_by" name="sort_by">
+                        <option value="alltasks">All Tasks</option>
                         <option value="day">Day</option>
                         <option value="week">Week</option>
                         <option value="future">Future</option>
@@ -71,8 +72,10 @@
                             <a href="#"
                                data-toggle="modal"
                                data-target="#applicantModal{{$task->id}}"
-                               style="color: gray">
-                                {{ $task->name }}
+                               style="color:
+                                    {{ (Carbon\Carbon::parse($task->due_date)->format('yy-m-d') < Date('yy-m-d') ? 'red' : ($task->status == 'complete' ? 'green' : 'gray'))}}"
+                                    >
+                                    {{ $task->name }}
                             </a>
                         </h3>
                         <h5>Priority: {{ $task->priority }}</h5>

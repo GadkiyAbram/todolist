@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -30,7 +31,7 @@ class TasksController extends Controller
             ->where(function ($q) {
                 $q->where('created_by', Auth::id())
                     ->orWhere('assigned_to', Auth::id());
-            })->get();
+            })->get();  //->move is to the separate function
 
 
 //        dd($tasks, $currentUserId);
@@ -94,6 +95,20 @@ class TasksController extends Controller
                 ->orderBy('assigned_to', 'asc')
                 ->get();
         }
+        else if($sort_by == 'alltasks'){
+            $tasks = Task::from('tasks')
+                ->where(function ($q) {
+                    $q->where('created_by', Auth::id())
+                        ->orWhere('assigned_to', Auth::id());
+                })->get();
+            dd($tasks);
+        }
+//        dd(Date('yy-m-d'));
+//        dd($tasks[0]->due_date);
+
+//        dd(Carbon::parse($tasks[0]->due_date)->format('yy-m-d') < Date('yy-m-d'),
+//            Carbon::parse($tasks[0]->due_date)->format('yy-m-d'),
+//            Date('yy-m-d'));
 
         $users = DB::table('users')->where(['manager_id' => Auth::id()])
             ->get();

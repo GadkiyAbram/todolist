@@ -10,7 +10,6 @@
                             <div class="align-content-center">
                                 <h1>Create Task</h1>
                             </div>
-
                         </div>
 
                         <form action="{{ route('tasks.store') }}" method="post" enctype="multipart/form-data">
@@ -141,8 +140,7 @@
                                 <div class="col-sm-12">
                                     <input type="text" class="form-control" name="name"
                                            value="{{$task->name}}"
-                                        {{$task->created_by == \Illuminate\Support\Facades\Auth::id() ? '' : "disabled"}}
-                                           >
+                                        {{$task->created_by == \Illuminate\Support\Facades\Auth::id() ? '' : "disabled"}}>
                                 </div>
                             </div>
 
@@ -158,7 +156,7 @@
                             <div class="form-group row">
                                 <label for="due_date" class="col-sm-6 col-form-label">Due Date</label>
                                 <div class="col-sm-12">
-                                    <input type="date" class="form-control" name="due_date" value={{\Carbon\Carbon::now()}}
+                                    <input type="date" class="form-control" name="due_date" value={{\Carbon\Carbon::parse($task->due_date)->format('yy-m-d')}}
                                         {{$task->created_by == \Illuminate\Support\Facades\Auth::id() ? '' : "disabled"}}>
                                 </div>
                             </div>
