@@ -12,7 +12,6 @@
 
     <div class="row justify-content-center mb-3">
         <div class="col-sm-4">
-{{--            <a class="mb-3" href="/">Go back HOME</a>--}}
             <button class="btn btn-block btn-primary"><a href="/" style="color: #ffffff">HOME</a></button>
             <button type="button"
                     class="btn btn-block btn-success"
@@ -23,30 +22,32 @@
             </button>
             <div class="dropdown mt-2">
                 <form action="{{ route('tasks.sortby') }}" method="post" enctype="multipart/form-data">
-                    <select class="sortby form-control" id="sort_by" name="sort_by">
-                        <option value="alltasks">All Tasks</option>
-                        <option value="day">Day</option>
-                        <option value="week">Week</option>
-                        <option value="future">Future</option>
-                        <option value="updated_at" selected>Updated</option>
-                    </select>
-{{--                    <div class="col-sm-12">--}}
-{{--                        <button class="btn btn-block btn-primary" type="submit">Refresh</button>--}}
-{{--                    </div>--}}
+                    <div class="d-flex">
+                        <label for="sort_by" class="col-14 col-form-label mr-4">Sort:</label>
+                        <select class="sortby form-control" id="sort_by" name="sort_by">
+                            <option value="alltasks">All Tasks</option>
+                            <option value="day">Day</option>
+                            <option value="week">Week</option>
+                            <option value="future">Future</option>
+                            <option value="updated_at" selected>Updated</option>
+                        </select>
+                    </div>
 
                     <div class="dropdown mt-2">
-
                         <form action="{{ route('tasks.sortby') }}" method="post" enctype="multipart/form-data">
-                            @if(Auth::user()->is_manager == true)
-                                <select class="sortby form-control" id="responsible" name="responsible">
-                                    @foreach($usersToAssign as $employee)
-                                        <option value={{ $employee->id }}>
-                                            {{ $employee->first_name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            @endif
-                            <div class="col-sm-12 mt-2">
+                            <div class="d-flex">
+                                @if(Auth::user()->is_manager == true)
+                                    <label for="responsible" class="col-14 col-form-label mr-4">Responsible:</label>
+                                    <select class="sortby form-control" id="responsible" name="responsible">
+                                        @foreach($usersToAssign as $employee)
+                                            <option value={{ $employee->id }}>
+                                                {{ $employee->first_name }} {{ $employee->last_name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                @endif
+                            </div>
+                            <div class="col-sm-14 mt-2">
                                 <button class="btn btn-block btn-primary" type="submit">Refresh</button>
                             </div>
                             @csrf
@@ -59,12 +60,8 @@
     </div>
 
     @if($tasks->count() == 0)
-        <p class="lead text-center">Well done chops, nothing to do unless you create one :)</p>
+        <p class="lead text-center">Well done, nothing to do until you create one :)</p>
     @else
-        <div class="d-flex justify-content-around mb-3">
-
-
-        </div>
         @foreach($tasks as $task)
             <div class="row">
                 <div class="col-sm-12">
@@ -74,7 +71,7 @@
                                data-toggle="modal"
                                data-target="#applicantModal{{$task->id}}"
                                style="color:
-                                    {{ (Carbon\Carbon::parse($task->due_date)->format('yy-m-d') < Date('yy-m-d') ? 'red' : ($task->status == 'complete' ? 'green' : 'gray'))}}"
+                                    {{ $task->status == 'complete' ? 'green' : (Carbon\Carbon::parse($task->due_date)->format('yy-m-d') < Date('yy-m-d') ? 'red' : 'gray' )}}"
                                     >
                                     {{ $task->name }}
                             </a>
@@ -90,7 +87,9 @@
 
                         <form action="tasks/delete/{{ $task->id }}" method="POST" enctype="multipart/form-data">
                             @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            <button type="submit" class="btn btn-sm btn-danger"
+                                {{Auth::user()->is_manager == true ? '' : "disabled"}}
+                            >Delete</button>
                             @csrf
                         </form>
                     </div>
@@ -98,41 +97,15 @@
             </div>
             <hr>
         @endforeach
-{{--        <p class="ml-3 mr-3" id="output">--}}
-{{--            @include('tasks.data');--}}
-{{--        </p>--}}
-
     @endif
 
-    {{--    MODAL CREATE--}}
-{{--    @include('tasks.modal', ['usersToAssign' => $usersToAssign])--}}
+    {{--   INCLUDE MODALS CREATE / UPDATE--}}
     @include('tasks.modal')
     @include('tasks.create')
-
         {{--END MODAL CREATE--}}
+
+    {{--Store previous values for both select's (sort_by & responsible)--}}
     <script type="text/javascript">
-        // On change store the value
-        // $('#sort_by_time').on('change', function(){
-        //     var sort_by_time = $(this).val();
-        //     localStorage.setItem('sortbyfilter', sort_by_time );
-        // });
-        //
-        // $('#responsible').on('change', function(){
-        //     var responsible = $(this).val();
-        //     localStorage.setItem('responsible', responsible );
-        // });
-        //
-        // $(document).ready(function() {
-        //     // On refresh check if there are values selected
-        //     if (localStorage.sort_by_time) {
-        //         // Select the value stored
-        //         $('#sort_by_time').val( localStorage.sort_by_time );
-        //     }
-        //     if (localStorage.responsible) {
-        //         // Select the value stored
-        //         $('#responsible').val( localStorage.responsible );
-        //     }
-        // });
         $('.sortby').change(function() {
             localStorage.setItem(this.id, this.value);
         }).val(function() {

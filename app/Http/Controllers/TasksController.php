@@ -179,9 +179,7 @@ class TasksController extends Controller
      */
     public function show($id)
     {
-        // Find the Task by id
-        // Return a view show.blade.php
-        // pass the variable to view
+
     }
 
     /**
@@ -196,9 +194,7 @@ class TasksController extends Controller
         $selected = 'selected';
         $task = Task::find($id);
         if ($task->created_by == Auth::id()){ $disabled = ''; }
-//        dd($task->due_date < date('M j, Y'), $task->due_date, date('M j, Y'));
 
-//        $task->dueDateFormatting = false;
         return view('tasks.edit', compact('task', 'disabled', 'selected'));
     }
 
@@ -211,18 +207,15 @@ class TasksController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // Find a related task
         $task = Task::find($id);
 
         if(Auth::id() == $task->created_by){
-            // validate the Data
             $this->validate($request, [
                 'name' => 'required|string|max:255|min:3',
                 'description' => 'required|string|max:10000|min:10',
                 'due_date' => 'required|date',
             ]);
 
-            // assign the task data from our request
             $task->name = $request->name;
             $task->description = $request->description;
             $task->due_date = $request->due_date;
@@ -232,10 +225,8 @@ class TasksController extends Controller
             $task->status = $request->status;
         }
 
-        // save the task
         $task->save();
 
-        // flash Session message with Success
         Session::flash('success', 'Saved The Task Successfully');
 
         // Return a Redirect
@@ -250,13 +241,9 @@ class TasksController extends Controller
      */
     public function destroy($id)
     {
-        // finding the specific task by id
         $task = Task::find($id);
-        // deleting the task
         $task->delete();
-        // flashing the ssession message
         Session::flash('success', 'Task deleted successfully');
-        // In the end we return & redirect
         return redirect()->route('tasks.index');
     }
 }

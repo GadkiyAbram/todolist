@@ -49,8 +49,7 @@
                             <div class="form-group row">
                                 <label for="description" class="col-sm-6 col-form-label">Description</label>
                                 <div class="col-sm-12">
-                                    <textarea type="text" class="form-control" name="description">
-                                    </textarea>
+                                    <textarea type="text" class="form-control" name="description"></textarea>
                                 </div>
                             </div>
 
@@ -77,7 +76,7 @@
                                     <button data-dismiss="modal" class="btn btn-block btn-secondary">Close</button>
                                 </div>
                                 <div class="col-sm-4">
-                                    <button class="btn btn-block btn-primary" type="submit">Save Task</button>
+                                    <button class="btn btn-block btn-primary" type="submit">Add Task</button>
                                 </div>
                             </div>
                             @csrf
@@ -111,16 +110,18 @@
                             @method('PATCH')
                             <div class="d-flex justify-content-between">
                                 <div>
-                                    <div class="btn-group btn-group-toggle" data-toggle="buttons"
-                                        {{$task->created_by == \Illuminate\Support\Facades\Auth::id() ? '' : "disabled"}}>
+                                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                         <label class="btn btn-danger active">
-                                            <input type="radio" name="priority" value="High" checked> High
+                                            <input type="radio" name="priority" value="High" checked
+                                                {{$task->created_by == \Illuminate\Support\Facades\Auth::id() ? '' : "disabled"}}> High
                                         </label>
                                         <label class="btn btn-warning">
-                                            <input type="radio" name="priority" value="Medium"> Medium
+                                            <input type="radio" name="priority" value="Medium"
+                                                {{$task->created_by == \Illuminate\Support\Facades\Auth::id() ? '' : "disabled"}}> Medium
                                         </label>
                                         <label class="btn btn-success">
-                                            <input type="radio" name="priority" value="Low"> Low
+                                            <input type="radio" name="priority" value="Low"
+                                                {{$task->created_by == \Illuminate\Support\Facades\Auth::id() ? '' : "disabled"}}> Low
                                         </label>
                                     </div>
                                 </div>
@@ -161,28 +162,10 @@
                                 </div>
                             </div>
 
-{{--                            <div class="form-group row">--}}
-{{--                                <label for="assigned_to" class="col-6 col-form-label">Assign to</label>--}}
-{{--                                <div class="col-6">--}}
-{{--                                    <select name="assigned_to" id="assigned_to" class="form-control"--}}
-{{--                                        {{$task->created_by == \Illuminate\Support\Facades\Auth::id() ? '' : "disabled"}}>--}}
-{{--                                        @foreach($usersToAssign as $user)--}}
-{{--                                            <option value="{{ $user->id }}">{{ $user->first_name }} {{ $user->last_name }}</option>--}}
-{{--                                        @endforeach--}}
-{{--                                    </select>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-
                             <div class="form-group row">
                                 <label for="assigned_to" class="col-6 col-form-label">Assign to</label>
                                 <div class="col-6">
                                     <label for="assigned_to" class="col-6 col-form-label">{{ $task->user->first_name }} {{ $task->user->last_name }}</label>
-{{--                                    <select name="assigned_to" id="assigned_to" class="form-control"--}}
-{{--                                        {{$task->created_by == \Illuminate\Support\Facades\Auth::id() ? '' : "disabled"}}>--}}
-{{--                                        @foreach($usersToAssign as $user)--}}
-{{--                                            <option value="{{ $user->id }}">{{ $user->first_name }} {{ $user->last_name }}</option>--}}
-{{--                                        @endforeach--}}
-{{--                                    </select>--}}
                                 </div>
                             </div>
 
@@ -191,17 +174,16 @@
                                     <button data-dismiss="modal" class="btn btn-block btn-secondary">Close</button>
                                 </div>
                                 <div class="col-sm-4">
-                                    <button class="btn btn-block btn-primary" type="submit">Save Task</button>
+                                    <button class="btn btn-block btn-primary" type="submit">Update Task</button>
                                 </div>
                             </div>
                             @csrf
                         </form>
                     </div>
                 </div>
-                {{--END MODAL BODY--}}
             </div>
         </div>
     </div>
 </div>
 @endforeach
-{{--END MODAL--}}
+{{--END EDIT MODAL--}}
