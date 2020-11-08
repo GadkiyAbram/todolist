@@ -14,7 +14,7 @@ class TasksController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
 
     public function index()
@@ -25,27 +25,41 @@ class TasksController extends Controller
             ->where('id', '!=', $currentUserId)
             ->get()
             ->toArray();
-        $tasks = Task::orderBy('due_date', 'asc')
-            ->where('created_by', $currentUserId)
-            ->paginate(5);
 
-        $users = DB::table('users')->where(['manager_id' => Auth::id()])
-            ->get();
+        $tasks = Task::from('tasks')
+            ->where(function ($q) {
+                $q->where('created_by', Auth::id())
+                    ->orWhere('assigned_to', Auth::id());
+            })->get();
+
+
+//        dd($tasks, $currentUserId);
+
+        $users = DB::table('users')
+            ->where(['manager_id' => Auth::id()])
+            ->get()
+            ->toArray();
         return view('tasks.index', compact('tasks', 'usersToAssign', 'users'));
     }
 
-    public function getTasksForCreatorsAndResponsible(){
-        return Task::from('tasks')
-//            ->where('assigned_to', $responsible)
+    public function getTasksForCreatorsAndResponsible($responsible){
+
+        $tasks = Task::from('tasks')
             ->where(function ($q){
                 $q->where('created_by', Auth::id())
                     ->orWhere('assigned_to', Auth::id());
             });
+        if ($responsible != null){
+            $tasks = $tasks->where('assigned_to', $responsible);
+        }
+
+        return $tasks;
     }
 
     public function sortBy(Request $request){
 
         $responsible = $request->responsible;
+//        dd($responsible);
 
         $currentUserId = Auth::id();
         $usersToAssign = DB::table('users')
@@ -56,11 +70,10 @@ class TasksController extends Controller
 
         $sort_by = $request->sort_by;
 
-        $tasks = $this->getTasksForCreatorsAndResponsible();
+        $tasks = $this->getTasksForCreatorsAndResponsible($responsible);
 
         if($sort_by == 'day'){
             $tasks = $tasks
-//                ->where('assigned_to', $responsible)
                 ->where('due_date', date('yy-m-d'))
                 ->get();
         }else if ($sort_by == 'updated_at'){
@@ -68,18 +81,15 @@ class TasksController extends Controller
 
         }else if ($sort_by == 'week'){
             $tasks = $tasks
-//                ->where('assigned_to', $responsible)
                 ->where('due_date', '<', Date('yy-m-d', strtotime('+7 days')))
                 ->get();
 
         }else if ($sort_by == 'future'){
             $tasks
-//                ->where('assigned_to', $responsible)
                 ->where('due_date', '>', Date('yy-m-d', strtotime('+7 days')))
                 ->get();
         }else if ($sort_by == 'assigned_to'){
             $tasks = $tasks
-//                ->where('assigned_to', $responsible)
                 ->where('created_by', Auth::id())
                 ->orderBy('assigned_to', 'asc')
                 ->get();
@@ -90,8 +100,6 @@ class TasksController extends Controller
 
         return view('tasks.index', compact('tasks', 'usersToAssign', 'users'));
     }
-
-
 
     /**
      * Show the form for creating a new resource.

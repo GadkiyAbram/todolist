@@ -13,20 +13,20 @@
     <div class="row justify-content-center mb-3">
         <div class="col-sm-4">
             <a class="mb-3" href="/">Go back HOME</a>
-            <button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#applicantModalCreateTask">
+            <button type="button"
+                    class="btn btn-block btn-success"
+                    data-toggle="modal"
+                    data-target="#applicantModalCreateTask"
+                {{Auth::user()->is_manager == true ? '' : "disabled"}}>
                 Create Task
             </button>
             <div class="dropdown mt-2">
                 <form action="{{ route('tasks.sortby') }}" method="post" enctype="multipart/form-data">
-                    <select class="form-control" id="sort_by" name="sort_by">
-                        <option value="day"
-                                class="sort_by" id="sort_by">Day</option>
-                        <option value="week"
-                                class="sort_by" id="sort_by">Week</option>
-                        <option value="future"
-                                class="sort_by" id="sort_by">Future</option>
-                        <option value="updated_at"
-                                class="sort_by" id="sort_by" selected>Updated</option>
+                    <select class="sortby form-control" id="sort_by" name="sort_by">
+                        <option value="day">Day</option>
+                        <option value="week">Week</option>
+                        <option value="future">Future</option>
+                        <option value="updated_at" selected>Updated</option>
                     </select>
 {{--                    <div class="col-sm-12">--}}
 {{--                        <button class="btn btn-block btn-primary" type="submit">Refresh</button>--}}
@@ -36,11 +36,11 @@
 
                         <form action="{{ route('tasks.sortby') }}" method="post" enctype="multipart/form-data">
                             @if(Auth::user()->is_manager == true)
-                                <select class="form-control" id="responsible" name="responsible">
+                                <select class="sortby form-control" id="responsible" name="responsible">
                                     @foreach($usersToAssign as $employee)
-                                        <option value={{ $employee->id }}
-                                            class="sort_by" id="responsible"
-                                        >{{ $employee->first_name }}</option>
+                                        <option value={{ $employee->id }}>
+                                            {{ $employee->first_name }}
+                                        </option>
                                     @endforeach
                                 </select>
                             @endif
@@ -56,27 +56,6 @@
         </div>
     </div>
 
-    <div class="row justify-content-center mb-3">
-        <div class="col-sm-4">
-{{--            <div class="dropdown">--}}
-{{--                <form action="{{ route('tasks.sortby') }}" method="post" enctype="multipart/form-data">--}}
-{{--                    <select class="form-control" id="sort_by" name="sort_by">--}}
-{{--                        @foreach($users as $user)--}}
-{{--                            <option value="{{$user->id}}"--}}
-{{--                                    class="sort_by" id="sort_by" >{{$user->first_name}}</option>--}}
-{{--                        @endforeach--}}
-
-{{--                    </select>--}}
-{{--                    <div class="col-sm-12">--}}
-{{--                        <button class="btn btn-block btn-primary" type="submit">Refresh</button>--}}
-{{--                    </div>--}}
-{{--                    @csrf--}}
-{{--                </form>--}}
-{{--            </div>--}}
-
-        </div>
-    </div>
-
     @if($tasks->count() == 0)
         <p class="lead text-center">Well done chops, nothing to do unless you create one :)</p>
     @else
@@ -84,19 +63,17 @@
 
 
         </div>
-
         @foreach($tasks as $task)
             <div class="row">
                 <div class="col-sm-12">
                     <div class="d-flex justify-content-between">
                         <h3>
-                            <a href="#" data-toggle="modal" data-target="#applicantModal{{$task->id}}" style="color: #1a202c">{{ $task->name }}</a>
-{{--                            <a href="#" id="{{ $task->id }}" style="color: gray" class="taskName" data-toggle="modal" target="#applicantModal{{$task->id}}">--}}
-{{--                                {{ $task->name }}--}}
-{{--                            </a>--}}
-{{--                            <a href="/tasks/{{ $task->id }}/edit" id="{{ $task->id }}" style="color: gray" class="taskName">--}}
-{{--                                {{ $task->name }}--}}
-{{--                            </a>--}}
+                            <a href="#"
+                               data-toggle="modal"
+                               data-target="#applicantModal{{$task->id}}"
+                               style="color: gray">
+                                {{ $task->name }}
+                            </a>
                         </h3>
                         <h5>Priority: {{ $task->priority }}</h5>
                         <h6>Created: {{ $task->created_at }}</h6>
@@ -117,6 +94,9 @@
             </div>
             <hr>
         @endforeach
+{{--        <p class="ml-3 mr-3" id="output">--}}
+{{--            @include('tasks.data');--}}
+{{--        </p>--}}
 
     @endif
 
@@ -126,5 +106,36 @@
     @include('tasks.create')
 
         {{--END MODAL CREATE--}}
+    <script type="text/javascript">
+        // On change store the value
+        // $('#sort_by_time').on('change', function(){
+        //     var sort_by_time = $(this).val();
+        //     localStorage.setItem('sortbyfilter', sort_by_time );
+        // });
+        //
+        // $('#responsible').on('change', function(){
+        //     var responsible = $(this).val();
+        //     localStorage.setItem('responsible', responsible );
+        // });
+        //
+        // $(document).ready(function() {
+        //     // On refresh check if there are values selected
+        //     if (localStorage.sort_by_time) {
+        //         // Select the value stored
+        //         $('#sort_by_time').val( localStorage.sort_by_time );
+        //     }
+        //     if (localStorage.responsible) {
+        //         // Select the value stored
+        //         $('#responsible').val( localStorage.responsible );
+        //     }
+        // });
+        $('.sortby').change(function() {
+            localStorage.setItem(this.id, this.value);
+        }).val(function() {
+            return localStorage.getItem(this.id)
+        });
+    </script>
 
 @endsection
+
+

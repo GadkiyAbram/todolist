@@ -112,7 +112,8 @@
                             @method('PATCH')
                             <div class="d-flex justify-content-between">
                                 <div>
-                                    <div class="btn-group btn-group-toggle" data-toggle="buttons" readonly="{{ $task->created_by == \Illuminate\Support\Facades\Auth::id() }}">
+                                    <div class="btn-group btn-group-toggle" data-toggle="buttons"
+                                        {{$task->created_by == \Illuminate\Support\Facades\Auth::id() ? '' : "disabled"}}>
                                         <label class="btn btn-danger active">
                                             <input type="radio" name="priority" value="High" checked> High
                                         </label>
@@ -139,18 +140,18 @@
                                 <label for="name" class="col-sm-6 col-form-label">Task Name</label>
                                 <div class="col-sm-12">
                                     <input type="text" class="form-control" name="name"
-                                        {{\Illuminate\Support\Facades\Auth::id() ? '' : 'readonly'}}"
-                                          value={{$task->name}} >
+                                           value="{{$task->name}}"
+                                        {{$task->created_by == \Illuminate\Support\Facades\Auth::id() ? '' : "disabled"}}
+                                           >
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <label for="description" class="col-sm-6 col-form-label">Description</label>
                                 <div class="col-sm-12">
-                                    <textarea type="text" class="form-control" name="description"
-                                        {{\Illuminate\Support\Facades\Auth::id() ? '' : 'readonly'}}>
-                                        {{ $task->description }}
-                                    </textarea>
+                                    <textarea type="text" rows="7" class="form-control" name="description"
+                                        {{$task->created_by == \Illuminate\Support\Facades\Auth::id() ? '' : "disabled"}}
+                                    >{{ $task->description }}</textarea>
                                 </div>
                             </div>
 
@@ -158,19 +159,32 @@
                                 <label for="due_date" class="col-sm-6 col-form-label">Due Date</label>
                                 <div class="col-sm-12">
                                     <input type="date" class="form-control" name="due_date" value={{\Carbon\Carbon::now()}}
-                                        {{\Illuminate\Support\Facades\Auth::id() ? '' : 'readonly'}}>
+                                        {{$task->created_by == \Illuminate\Support\Facades\Auth::id() ? '' : "disabled"}}>
                                 </div>
                             </div>
+
+{{--                            <div class="form-group row">--}}
+{{--                                <label for="assigned_to" class="col-6 col-form-label">Assign to</label>--}}
+{{--                                <div class="col-6">--}}
+{{--                                    <select name="assigned_to" id="assigned_to" class="form-control"--}}
+{{--                                        {{$task->created_by == \Illuminate\Support\Facades\Auth::id() ? '' : "disabled"}}>--}}
+{{--                                        @foreach($usersToAssign as $user)--}}
+{{--                                            <option value="{{ $user->id }}">{{ $user->first_name }} {{ $user->last_name }}</option>--}}
+{{--                                        @endforeach--}}
+{{--                                    </select>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
 
                             <div class="form-group row">
                                 <label for="assigned_to" class="col-6 col-form-label">Assign to</label>
                                 <div class="col-6">
-                                    <select name="assigned_to" id="assigned_to" class="form-control"
-                                        {{\Illuminate\Support\Facades\Auth::id() ? '' : 'disabled'}}>
-                                        @foreach($usersToAssign as $user)
-                                            <option value="{{ $user->id }}">{{ $user->first_name }} {{ $user->last_name }}</option>
-                                        @endforeach
-                                    </select>
+                                    <label for="assigned_to" class="col-6 col-form-label">{{ $task->user->first_name }} {{ $task->user->last_name }}</label>
+{{--                                    <select name="assigned_to" id="assigned_to" class="form-control"--}}
+{{--                                        {{$task->created_by == \Illuminate\Support\Facades\Auth::id() ? '' : "disabled"}}>--}}
+{{--                                        @foreach($usersToAssign as $user)--}}
+{{--                                            <option value="{{ $user->id }}">{{ $user->first_name }} {{ $user->last_name }}</option>--}}
+{{--                                        @endforeach--}}
+{{--                                    </select>--}}
                                 </div>
                             </div>
 
