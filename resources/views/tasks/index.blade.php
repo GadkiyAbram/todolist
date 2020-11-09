@@ -25,7 +25,7 @@
                     <div class="d-flex">
                         <label for="sort_by" class="col-14 col-form-label mr-4">Sort:</label>
                         <select class="sortby form-control" id="sort_by" name="sort_by">
-                            <option value="alltasks">All Tasks</option>
+                            <option value="alltasks">All My Tasks</option>
                             <option value="day">Day</option>
                             <option value="week">Week</option>
                             <option value="future">Future</option>
@@ -111,6 +111,8 @@
         }).val(function() {
             return localStorage.getItem(this.id)
         });
+
+
     </script>
 
 @endsection
