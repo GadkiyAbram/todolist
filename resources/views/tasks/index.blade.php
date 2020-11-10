@@ -81,7 +81,9 @@
                     </div>
                     <p>{{ $task->description }}</p>
                     <h4>Due Date: <small class="due_date">{{ \Carbon\Carbon::parse($task->due_date)->format('Y/m/d') }}</small></h4>
-                    <h4>Responsible: <small>{{ $task->user->first_name }} {{ $task->user->last_name }}</small></h4>
+                    <h4>Responsible: <small>{{ $task->assigned_to === \Illuminate\Support\Facades\Auth::id() ? (($task->user->first_name. " ". $task->user->last_name). ' (You)') : ($task->user->first_name. " ". $task->user->last_name) }}
+{{--                            {{ $task->user->first_name }} {{ $task->user->last_name }}--}}
+                        </small></h4>
                     <h4>Status: <small class="status">{{ $task->status }}</small></h4>
                     <div class="d-flex justify-content-start">
 

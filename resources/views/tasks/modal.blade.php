@@ -64,6 +64,7 @@
                                 <label for="assigned_to" class="col-6 col-form-label">Assign to</label>
                                 <div class="col-6">
                                     <select name="assigned_to" id="assigned_to" class="form-control">
+                                        <option value="{{ \Illuminate\Support\Facades\Auth::id() }}">Assign to myself</option>
                                         @foreach($usersToAssign as $user)
                                             <option value="{{ $user->id }}">{{ $user->first_name }} {{ $user->last_name }}</option>
                                         @endforeach

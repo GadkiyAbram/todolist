@@ -146,6 +146,7 @@ class TasksController extends Controller
            'name' => 'required|string|max:255|min:3',
            'description' => 'required|string|max:10000|min:10',
            'due_date' => 'required|date',
+            'assigned_to' => 'required',
         ]);
 
         // create a new task
