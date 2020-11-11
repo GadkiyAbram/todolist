@@ -114,6 +114,17 @@
             return localStorage.getItem(this.id)
         });
 
+        var disable_responsinble = function () {
+            if ($("#sort_by").val() === 'alltasks') {
+                $('#responsible').prop('disabled', true);
+            }
+            else {
+                $('#responsible').prop('disabled', false);
+            }
+        };
+        $(disable_responsinble);
+        $("#sort_by").change(disable_responsinble);
+
 
     </script>
 

@@ -166,7 +166,7 @@ class TasksController extends Controller
         $task->save();
 
         // flash Session message with Success
-        Session::flash('success', 'Created Task Successfully');
+//        Session::flash('success', 'Created Task Successfully');
 
         // Return a Redirect
         return redirect()->route('tasks.index');
